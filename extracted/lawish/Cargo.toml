@@ -1,0 +1,99 @@
+# lawish — Wish-to-System engine, extracted as an isolated, repo-agnostic workspace.
+#
+# This workspace was surgically extracted from the Kosmocrates monorepo. The
+# engine crates retain their original `kosmo-*` directory/crate names this pass
+# (extraction fidelity + zero-edit relative path deps; content-addressed identity
+# is unaffected by names). The lawish-branded public surface is the `lawish`
+# facade crate (crates/lawish) and the `lawish` CLI (tools/lawish). See
+# EXTRACTION_REPORT.md and MIGRATION_NOTES.md.
+[workspace]
+resolver = "2"
+members = [
+    # L0 — deterministic substrate
+    "crates/kosmo-core",
+    "crates/kosmo-workbench",
+    "crates/kosmo-parseback",
+    "crates/kosmo-sandbox",
+    "crates/kosmo-spectral",
+    "crates/kosmo-kcube",
+    "crates/kosmo-foundry",
+    "crates/kosmo-store",
+    # L1–L6 — wish model, observation, assessment, descent, repair
+    "crates/kosmo-hyphae",
+    "crates/kosmo-intent",
+    "crates/kosmo-intent-llm",
+    "crates/kosmo-llm",
+    "crates/kosmo-pipeline",
+    "crates/kosmo-synthesizer",
+    "crates/kosmo-synthesizer-llm",
+    "crates/kosmo-agent",
+    "crates/kosmo-materialize",
+    # L8 — system topology
+    "crates/kosmo-systemcube",
+    # bridge boundary (kosmo-core only, no pse-core)
+    "crates/kosmo-pse-bridge",
+    # L9 — CDK / condensation (built under the `cdk` feature of the facade)
+    "crates/kosmo-cdk-core",
+    "crates/kosmo-coffindragger",
+    "crates/kosmo-wings",
+    # vendored to satisfy kosmo-wings' MPK oracle (no kosmo deps)
+    "crates/pse-metatron",
+    "crates/pse-types",
+    # facade + CLIs
+    "crates/lawish",
+    "tools/lawish",
+    "tools/kosmo-cdk",
+]
+
+# Example fixture crates are standalone demo workspaces, not engine members.
+exclude = [
+    "examples/simple_wish",
+    "examples/wishlist_project",
+]
+
+# Keep the default `cargo build` focused on the standalone engine + facade + CLI.
+# The CDK tool (axum/tokio REST surface) and vendored PSE crates still build under
+# `cargo build --workspace` / `cargo test --workspace`.
+default-members = [
+    "crates/lawish",
+    "tools/lawish",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["lawish contributors"]
+license = "MIT"
+description = "lawish — universal, repo-agnostic Wish-to-System engine"
+repository = "https://example.invalid/lawish"
+homepage = "https://example.invalid/lawish"
+readme = "README.md"
+keywords = ["wish", "topology", "deterministic", "agnostic", "engine"]
+categories = ["development-tools", "algorithms", "data-structures"]
+rust-version = "1.82"
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_jcs = "0.2"
+sha2 = "0.11"
+thiserror = "2"
+nalgebra = "0.35"
+ordered-float = { version = "5", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde", "wasmbind"] }
+rayon = "1.10"
+reqwest = { version = "0.13", features = ["blocking", "json"] }
+axum = { version = "0.8", features = ["ws"] }
+tokio = { version = "1", features = ["full"] }
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+debug = false
+strip = "symbols"
+
+[profile.dev]
+opt-level = 0
+debug = true
+overflow-checks = true

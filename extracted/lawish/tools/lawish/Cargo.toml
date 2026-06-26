@@ -1,0 +1,49 @@
+[package]
+# Package is `lawish-cli`; the installed binary is `lawish` (see [[bin]] below).
+# The library facade package is `lawish` (crates/lawish).
+name = "lawish-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "lawish — Wish-to-System agent runner: drives the closed-loop pipeline→synthesize→materialize loop over any workspace, measuring a wish toward 100% DoD-fulfillment."
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+publish = false
+
+[[bin]]
+name = "lawish"
+path = "src/main.rs"
+
+[features]
+default = []
+# Adapter boundaries on the original Kosmocrates monorepo (classified: adapter
+# dependency). Enabling these requires vendoring the corresponding crates from
+# the source repo (`pse-adapter-kosmo` for `--ledger`, `pse-traverse` for
+# `--plan`); they are intentionally NOT extracted so the default build stays
+# 100% PSE-free and standalone. See EXTRACTION_REPORT.md §"Remaining couplings".
+ledger = []
+plan = []
+
+[dependencies]
+kosmo-core            = { path = "../../crates/kosmo-core", version = "0.1.0" }
+kosmo-foundry         = { path = "../../crates/kosmo-foundry", version = "0.1.0" }
+kosmo-hyphae          = { path = "../../crates/kosmo-hyphae", version = "0.1.0" }
+kosmo-intent          = { path = "../../crates/kosmo-intent", version = "0.1.0" }
+kosmo-intent-llm      = { path = "../../crates/kosmo-intent-llm", version = "0.1.0" }
+kosmo-kcube           = { path = "../../crates/kosmo-kcube", version = "0.1.0" }
+kosmo-llm             = { path = "../../crates/kosmo-llm", version = "0.1.0" }
+kosmo-parseback       = { path = "../../crates/kosmo-parseback", version = "0.1.0" }
+kosmo-pipeline        = { path = "../../crates/kosmo-pipeline", version = "0.1.0" }
+kosmo-sandbox         = { path = "../../crates/kosmo-sandbox", version = "0.1.0" }
+kosmo-store           = { path = "../../crates/kosmo-store", version = "0.1.0" }
+kosmo-synthesizer     = { path = "../../crates/kosmo-synthesizer", version = "0.1.0" }
+kosmo-synthesizer-llm = { path = "../../crates/kosmo-synthesizer-llm", version = "0.1.0" }
+kosmo-agent           = { path = "../../crates/kosmo-agent", version = "0.1.0" }
+kosmo-pse-bridge      = { path = "../../crates/kosmo-pse-bridge", version = "0.1.0" }
+serde                 = { workspace = true }
+serde_json            = { workspace = true }

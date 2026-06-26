@@ -1,0 +1,15 @@
+[package]
+name = "kosmo-store"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Persistent, append-only on-disk stores for the kosmo-* substrate (JSONL CorpusCartography). Host writes require allow_host_write."
+repository.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+kosmo-core = { path = "../kosmo-core", version = "0.1.0" }
+kosmo-hyphae = { path = "../kosmo-hyphae", version = "0.1.0" }
+serde = { workspace = true }
+serde_json = { workspace = true }
