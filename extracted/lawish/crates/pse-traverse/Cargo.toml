@@ -1,0 +1,104 @@
+[package]
+name = "pse-traverse"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "PSE Traversal Agent v0.1 — post-symbolic traversal layer over PSE (FieldCube, DoFGraph, CollapsePlan, fail-closed gating)"
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+pse-types = { path = "../pse-types", version = "0.1.0" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_jcs = { workspace = true }
+sha2 = { workspace = true }
+thiserror = { workspace = true }
+# lawish extraction: the `pse-commit` PSE bridge (pse-core / pse-graph) is the
+# crossing into the *other* (PSE-core) subsystem and is intentionally NOT
+# extracted. The optional pse-core/pse-graph path deps are removed and
+# `pse-commit` is dropped from `default`, so the topology / horizon / cognition
+# kernels (MeshHolo, PhaseSpaceWindow, FieldCube, CollapsePlan, …) compile
+# standalone against pse-types only. The `pse-commit`-gated source (bridge.rs)
+# is left intact but uncompiled; enabling the feature requires the PSE core
+# crates from the original repo. (Bridge-decoupling only — no logic change.)
+
+[features]
+default = ["horizon", "cognition", "topology"]
+pse-commit = []
+
+# ── PSE-TRAVERSE-HORIZON-03 (v0.3 null-centered horizon geometry) ──
+# `horizon`              — enables the v0.3 kernel (HorizonChart,
+#                          PhaseRay, ProjectionCone, CausalAdmissibility,
+#                          CollapseEmissionDuality, HorizonCrossingGate,
+#                          HorizonCertificate, run_horizon_v3).
+# `horizon-projection-v2`— forward-compat flag: when v0.2 lands, links
+#                          its outcome into the combined gate (today the
+#                          horizon layer accepts a `ProjectionV2OutcomeRef`
+#                          stub from callers).
+# `horizon-pse-bridge`   — forward-compat flag: routes finalized
+#                          emissions through the existing PSE-Bridge.
+# `horizon-adapters`     — forward-compat flag for optional domain
+#                          adapters; the v0.3 kernel itself stays
+#                          domain-neutral.
+horizon = []
+horizon-cli = ["horizon"]
+horizon-projection-v2 = ["horizon"]
+horizon-pse-bridge = ["horizon", "pse-commit"]
+horizon-adapters = ["horizon"]
+
+# ── PSE-TRAVERSE-COGNITION-01 (v0.1 panoptic phase cognition kernel) ──
+# `cognition`               — enables the v0.1 kernel (CanonicalCognitionState,
+#                             CognitiveState5D, SpiralMemory, ConstraintLattice,
+#                             HypercubePuzzle, PhasePanorama,
+#                             ScorpioPhaseScheduler, WormholeHypernet,
+#                             SelfModelTensor, FixpointCalibration,
+#                             SingularityTrigger, CognitionCandidateBundle,
+#                             run_cognition).
+# `cognition-cli`           — builds the `pse-traverse-cognition` CLI.
+# `cognition-simulation`    — feature-gates 5D simulation / stability probes.
+# `cognition-spiral-memory` — feature-gates spiral memory + resonance addressing.
+# `cognition-hypercube`     — feature-gates constraint lattice + hypercube puzzle.
+# `cognition-scorpio-phase` — feature-gates the scorpio phase scheduler.
+# `cognition-wormholes`     — feature-gates governed shortcuts.
+# `cognition-calibration`   — feature-gates fixpoint calibration.
+# `cognition-projection-handoff` — forward-compat flag to projection-v0.2.
+cognition = []
+cognition-cli = ["cognition"]
+cognition-simulation = ["cognition"]
+cognition-spiral-memory = ["cognition"]
+cognition-hypercube = ["cognition"]
+cognition-scorpio-phase = ["cognition"]
+cognition-wormholes = ["cognition"]
+cognition-calibration = ["cognition"]
+cognition-projection-handoff = ["cognition"]
+
+# ── PSE-TRAVERSE-TPT-MTL-04 (Topological Panoptic Triangulation & Möbius-Tripolar Micro-Lift) ──
+# `topology`             — base types, PhaseSpaceWindow, MeshHolo, gates.
+# `topology-cli`         — builds the `pse-traverse-topology` CLI.
+# `topology-mtl`         — MicroFiber, MTL-D1 dualization, SeamComponent, MicroLiftGate.
+# `topology-refine`      — recursive DK/SW/PI/WT/Press refinement under budget.
+# `topology-carrier`     — CarrierGate, KairosGate, CarrierMigrationReports.
+# `topology-reinterpret` — reinterpretation into Claims/Horizons/GateSignals.
+# `topology-handoff`     — handoff candidates without external commit.
+topology = []
+topology-cli = ["topology"]
+topology-mtl = ["topology"]
+topology-refine = ["topology"]
+topology-carrier = ["topology"]
+topology-reinterpret = ["topology"]
+topology-handoff = ["topology"]
+
+# ── PSE-LPCM-IMPLEMENTATION-01 (Fragmented 51% Condensation Layer) ──
+# `lpcm-fragment-collapse` — enables the LPCM layer (HierarchicalCollapseReport,
+#                             LocalCondensationBit, SeamPercolationGraph, etc.).
+lpcm-fragment-collapse = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]

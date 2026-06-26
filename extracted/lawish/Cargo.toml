@@ -39,6 +39,14 @@ members = [
     # vendored to satisfy kosmo-wings' MPK oracle (no kosmo deps)
     "crates/pse-metatron",
     "crates/pse-types",
+    # Structural extraction (real-but-previously-disjoint pieces of the full
+    # Wish-to-System vision): tensor / topological-mesh / 5D-phase-space / HDAG.
+    # Decoupled from the PSE-core and IL-ledger subsystems (see their manifests).
+    # Exposed via the facade's non-default `structure` feature.
+    "crates/pse-traverse",            # MeshHolo, PhaseSpaceWindow, FieldCube, CollapsePlan
+    "crates/phase-matrix",            # FieldTensorState, CouplingMatrix (tensor substrate)
+    "adapters/pse-adapter-il",        # ResonanceTensor + 5D HDAG (src/hdag.rs)
+    "vendors/infinityledger/mef-hdag", # 2D phase/time HDAG (leaf)
     # facade + CLIs
     "crates/lawish",
     "tools/lawish",

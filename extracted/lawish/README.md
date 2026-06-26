@@ -70,6 +70,12 @@ let cube = render_wish_cube(&wish, &observed, Digest::ZERO);
 - **`ledger` / `plan`** (on the CLI) — adapter integrations (`--ledger` ledger
   recall, `--plan` collapse plan) that depend on upstream crates not vendored
   here; the default build is PSE-free and these report a fail-closed message.
+- **`structure`** — the real-but-not-yet-wired pieces of the full Wish-to-System
+  vision: topological mesh + 5D phase space (`pse-traverse`), tensor substrate
+  (`phase-matrix`), and the 5D/2D HDAG (`pse-adapter-il`, `mef-hdag`). Re-exported
+  as `lawish::{topology, tensor_cells, hdag, hdag_mef}` for study; **not** wired
+  into the wish loop (integration pending the formal spec). Build:
+  `cargo build -p lawish --features structure`. See `STRUCTURE_GAP_ANALYSIS.md`.
 
 ## Layout
 

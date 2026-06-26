@@ -52,6 +52,34 @@ to re-pull upstream changes, and the recommended follow-up refactors.
 
 No engine logic, type, gate, or identity behavior was altered.
 
+## Structural extraction (second pass — the `structure` feature)
+
+Four real-but-previously-disjoint crates carrying the mesh / phase-space / tensor / HDAG structures
+were extracted verbatim and exposed behind the facade's non-default `structure` feature:
+
+| lawish path | source path | structure |
+|---|---|---|
+| `crates/pse-traverse` | `crates/pse-traverse` | MeshHolo, PhaseSpaceWindow, FieldCube, CollapsePlan |
+| `crates/phase-matrix` | `crates/phase-matrix` | FieldTensorState, CouplingMatrix |
+| `adapters/pse-adapter-il` | `adapters/pse-adapter-il` | 5D ResonanceTensor + HDAG (`src/hdag.rs`) |
+| `vendors/infinityledger/mef-hdag` | `vendors/infinityledger/mef-hdag` | 2D phase/time HDAG (leaf) |
+
+Two **manifest-only** trims decoupled the cross-subsystem bridges so these compile standalone against
+`pse-types` + external crates (no source/logic change; the gated code is left intact but uncompiled):
+
+8. **`crates/pse-traverse/Cargo.toml`** — removed the optional `pse-core` / `pse-graph` path deps;
+   `default` features changed from `["pse-commit","horizon","cognition","topology"]` to
+   `["horizon","cognition","topology"]`; `pse-commit = []` kept declared (its `bridge.rs` is left in
+   place but only compiled when `pse-commit` is enabled, which now requires the PSE-core crates from the
+   original repo — enabling `pse-commit` would pull ~18 PSE-core crates).
+9. **`adapters/pse-adapter-il/Cargo.toml`** — removed the six optional `mef-*` Infinity-Ledger path deps;
+   `il-pipeline = []` kept declared (the `il-pipeline`-gated code remains but is uncompiled; enabling it
+   requires vendoring the mef-* crates).
+
+These are re-exported as `lawish::{topology, tensor_cells, hdag, hdag_mef}` under `--features structure`
+and are **NOT wired** into the wish loop — the integration (Wish→tensor, WishCube→SystemCube, HDAG
+weaving, diamond→domain) is the forthcoming-spec work and was deliberately not attempted.
+
 ## Re-pulling upstream changes
 
 The engine crates are byte-faithful copies. To sync a newer Kosmocrates:

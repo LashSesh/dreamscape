@@ -53,6 +53,29 @@ pub use kosmo_coffindragger as coffindragger;
 #[cfg(feature = "cdk")]
 pub use kosmo_wings as wings;
 
+// ── Structural extraction (feature `structure`) ─────────────────────────────
+// The real-but-previously-disjoint pieces of the full Wish-to-System vision:
+// topological mesh + 5D phase space, the tensor substrate, and the HDAG. These
+// are re-exported as-is and are NOT yet wired into the wish loop — the
+// integration (Wish→tensor, WishCube→SystemCube, HDAG weaving, diamond→domain)
+// is deliberately left for the forthcoming formal spec. See
+// STRUCTURE_GAP_ANALYSIS.md.
+//
+//   `topology`     — pse-traverse: `MeshHolo` (simplicial complex, Betti),
+//                    `PhaseSpaceWindow` (5D), `FieldCube`, `CollapsePlan`.
+//   `tensor_cells` — phase-matrix: `FieldTensorState`, `CouplingMatrix`,
+//                    resonance cells / funnel graphs / convergence fields.
+//   `hdag`         — pse-adapter-il: 5D `ResonanceTensor` + acyclic `HDAG`.
+//   `hdag_mef`     — mef-hdag: the 2D phase/time HDAG (leaf).
+#[cfg(feature = "structure")]
+pub use mef_hdag as hdag_mef;
+#[cfg(feature = "structure")]
+pub use phase_matrix as tensor_cells;
+#[cfg(feature = "structure")]
+pub use pse_adapter_il as hdag;
+#[cfg(feature = "structure")]
+pub use pse_traverse as topology;
+
 // ── Stable verbs of the machine (thin, faithful wrappers) ───────────────────
 
 /// Parse plain prose into a content-addressed [`Wish`](kosmo_core::Wish).

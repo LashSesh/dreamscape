@@ -59,12 +59,36 @@ The individual blocks are real; the **connections that make them one machine are
 | SystemCube / BlueprintUnit / `.kcube` blueprint | ✅ (`kosmo-systemcube`, `kosmo-kcube`) |
 | Stage / AttractorStack / QSR / Diamond condensation | ✅ under the `cdk` feature (`kosmo-cdk-core`, `kosmo-coffindragger`) |
 | Ophanim cycle / WingMesh | ✅ under the `cdk` feature (`kosmo-wings`) |
-| HDAG (5D / 2D) | ❌ in `pse-adapter-il` / `vendors/infinityledger` — **not extracted** |
-| `MeshHolo` / `PhaseSpaceWindow` (5D phase space) | ❌ in `pse-traverse` — **not extracted** |
-| Tensor math (`phase-matrix`, `ResonanceTensor`) | ❌ in `phase-matrix` / `pse-adapter-il` — **not extracted** |
+| HDAG (5D `ResonanceTensor`) | ✅ under the `structure` feature (`adapters/pse-adapter-il`, `src/hdag.rs`) |
+| HDAG (2D phase/time) | ✅ under the `structure` feature (`vendors/infinityledger/mef-hdag`) |
+| `MeshHolo` / `PhaseSpaceWindow` (5D phase space) | ✅ under the `structure` feature (`crates/pse-traverse`) |
+| Tensor math (`FieldTensorState`, `CouplingMatrix`) | ✅ under the `structure` feature (`crates/phase-matrix`) |
 
-The HDAG / phase-space / mesh / tensor machinery lives in the `pse-*` family and vendors, which were
-intentionally **out of scope** for the Wish-to-System extraction (see `EXTRACTION_REPORT.md §4`).
+## Update — structural extraction completed (`structure` feature)
+
+The HDAG / phase-space / mesh / tensor structures, previously left in the `pse-*` family and vendors,
+have now been **faithfully extracted** into `lawish` behind a non-default **`structure`** cargo feature
+(`cargo build -p lawish --features structure`). They are **re-exported as-is and NOT wired** into the
+wish loop — the integration is the future-spec work and was deliberately not attempted.
+
+Extracted crates (all compile + test standalone; closures need only `pse-types` + external crates):
+
+| Crate (path) | Structure |
+|---|---|
+| `crates/pse-traverse` | `MeshHolo` (simplicial complex, Betti), `PhaseSpaceWindow` (5D), `FieldCube`, `DoFGraph`, `CollapsePlan` |
+| `crates/phase-matrix` | `FieldTensorState`, `CouplingMatrix`, resonance cells / funnel graphs / convergence fields |
+| `adapters/pse-adapter-il` | 5D `ResonanceTensor` + acyclic `HDAG` (coherence-gate acyclicity) |
+| `vendors/infinityledger/mef-hdag` | 2D phase/time `HDAG` (explicit cycle check) |
+
+To keep these standalone, two **cross-subsystem bridges were decoupled at the manifest level only**
+(no source/logic changes; the gated code is left intact but uncompiled — see `MIGRATION_NOTES.md`):
+1. `pse-traverse`: the `pse-commit` PSE-core bridge (`bridge.rs`) dropped from default features; optional
+   `pse-core`/`pse-graph` deps removed. (Enabling `pse-commit` would pull ~18 PSE-core crates.)
+2. `pse-adapter-il`: the optional `il-pipeline` mef-* deps removed; the HDAG/`ResonanceTensor` structure
+   is independent of them.
+
+> The three wiring gaps below are unchanged: the structures are now **present in lawish** but still
+> **not woven** into the wish/CDK cubes — that remains the integration frontier.
 
 ## Bottom line
 
