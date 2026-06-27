@@ -17,6 +17,18 @@ default = []
 # L9 condensation machine (CDK / CoffinDragger / Diamond). Pulls the vendored
 # pse-metatron MPK oracle (nalgebra + rayon) transitively via kosmo-wings.
 cdk = ["dep:kosmo-coffindragger", "dep:kosmo-cdk-core", "dep:kosmo-wings"]
+# Structural extraction: the real-but-previously-disjoint pieces of the full
+# Wish-to-System vision — topological mesh + 5D phase space (pse-traverse),
+# tensor substrate (phase-matrix), and the 5D/2D HDAG (pse-adapter-il, mef-hdag).
+# Re-exported only (NOT wired into the wish loop — that integration is future
+# work pending the formal spec). pse-traverse is pulled WITHOUT its pse-commit
+# bridge (default-features = false).
+structure = [
+    "dep:pse-traverse",
+    "dep:phase-matrix",
+    "dep:pse-adapter-il",
+    "dep:mef-hdag",
+]
 
 [dependencies]
 kosmo-core        = { path = "../kosmo-core", version = "0.1.0" }
@@ -32,3 +44,8 @@ kosmo-pse-bridge  = { path = "../kosmo-pse-bridge", version = "0.1.0" }
 kosmo-coffindragger = { path = "../kosmo-coffindragger", version = "0.1.0", optional = true }
 kosmo-cdk-core      = { path = "../kosmo-cdk-core", version = "0.1.0", optional = true }
 kosmo-wings         = { path = "../kosmo-wings", version = "0.1.0", optional = true }
+# Structural extraction (optional, behind the `structure` feature)
+pse-traverse  = { path = "../pse-traverse", version = "0.1.0", optional = true }
+phase-matrix  = { path = "../phase-matrix", version = "0.1.0", optional = true }
+pse-adapter-il = { path = "../../adapters/pse-adapter-il", version = "0.1.0", optional = true }
+mef-hdag      = { path = "../../vendors/infinityledger/mef-hdag", version = "0.1.0", optional = true }

@@ -44,15 +44,27 @@ path / randomness in IDs); **residue is visible, never swallowed**.
 - **L9 condensation (feature `cdk`):** `kosmo-cdk-core`, `kosmo-coffindragger`,
   `kosmo-wings`, with `pse-metatron` + `pse-types` vendored.
 - **L10 bridge:** `kosmo-pse-bridge` (core-only).
+- **Structural extraction (feature `structure`):** the real-but-previously-disjoint
+  pieces of the full Wish-to-System vision — `crates/pse-traverse` (`MeshHolo`,
+  `PhaseSpaceWindow`, `FieldCube`, `CollapsePlan`), `crates/phase-matrix`
+  (`FieldTensorState`, `CouplingMatrix`), `adapters/pse-adapter-il` (5D
+  `ResonanceTensor` + `HDAG`), `vendors/infinityledger/mef-hdag` (2D `HDAG`).
+  Re-exported as-is, **not wired** into the wish loop (integration is future-spec
+  work). Two cross-subsystem bridges decoupled at the manifest level only (see §10
+  and `MIGRATION_NOTES.md`). See `STRUCTURE_GAP_ANALYSIS.md`.
 - **Surface:** `lawish` facade crate + `lawish` CLI + `kosmo-cdk` CLI.
 
 See `EXTRACTION_INVENTORY.md` and `ENGINE_MAP.md` for the full per-symbol map.
 
 ## 4. What was intentionally NOT extracted
 
-- The entire `pse-*` family (PSE crystallization, NxAlien governance, Infinity
-  Ledger, HDAG, QTIC, adapters, eval/bench) — a separate subsystem, not part of
-  the Wish-to-System machine.
+- Most of the `pse-*` family (PSE crystallization, NxAlien governance, Infinity
+  Ledger pipeline, QTIC, eval/bench) and the PSE-core closure (~18 crates) — a
+  separate subsystem. **Exception:** the four *structural* crates listed above
+  (`pse-traverse`, `phase-matrix`, `pse-adapter-il`, `mef-hdag`) were extracted
+  under the `structure` feature because they carry the mesh / phase-space /
+  tensor / HDAG structures of the full vision; their bridges *into* PSE-core /
+  the IL ledger were decoupled so they stand alone.
 - Host tools `kosmo-operator`, `kosmo-promote`, `kosmo-server`, `kosmo-tui`,
   `kosmo-substrate`, `kosmo-eval`; web UI, TUI, node/python bindings.
 - **Adapter couplings** `pse-adapter-kosmo` (powers `--ledger`) and `pse-traverse`

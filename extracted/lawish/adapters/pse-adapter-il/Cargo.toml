@@ -1,0 +1,40 @@
+[package]
+name = "pse-adapter-il"
+version.workspace = true
+edition.workspace = true
+description = "PSE × Infinity Ledger bridge: converts SemanticCrystals into IL TIC blocks, 8D HNSW vectors, and file-based ledger. Optionally drives MEFCore::process() directly."
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+readme.workspace = true
+keywords.workspace = true
+categories.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+pse-types      = { path = "../../crates/pse-types", version = "0.1.0" }
+serde          = { workspace = true }
+serde_json     = { workspace = true }
+sha2           = { workspace = true }
+
+# lawish extraction: the optional Infinity-Ledger pipeline crates (mef-core,
+# mef-ingestion, mef-solvecoagula, mef-tic, mef-ledger, mef-spiral) are the
+# bridge into the IL ledger backend and are intentionally NOT extracted. The
+# optional path deps are removed; the HDAG / ResonanceTensor structure
+# (src/hdag.rs) and all non-pipeline adapter logic compile against pse-types
+# only. The `il-pipeline`-gated source is left intact but uncompiled; enabling
+# the feature requires the IL vendor crates from the original repo.
+# (Bridge-decoupling only — no logic change.)
+
+[features]
+# `il-pipeline` is kept declared (gated source references it) but is a no-op in
+# the extracted subsystem; enabling it requires vendoring the mef-* crates.
+il-pipeline = []
+full = ["il-pipeline"]
+
+[dev-dependencies]
+tempfile = "3"
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--cfg", "docsrs"]
