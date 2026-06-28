@@ -1,12 +1,9 @@
-# lawish
+# lawish-contractor ("RigidRick")
 
-**lawish** is an isolated, repo-agnostic **Wish-to-System engine** — an
+**lawish-contractor** is an isolated, repo-agnostic **Wish-to-Closure engine** — an
 infrastructural exoskeleton that any AI or agentic framework can integrate with
 to drive a *wish* from its starting point to **100% Definition-of-Done (DoD)
 fulfillment** without prompt-drift or context-loss across that distance.
-
-It was surgically extracted from the Kosmocrates monorepo and is **fully
-standalone**: the default build has zero dependency on the original repository.
 
 ## The machine
 
